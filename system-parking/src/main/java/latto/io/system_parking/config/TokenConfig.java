@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Component
 public class TokenConfig {
-    private String secret = "teste";
+    private String secret = "minha-chave-super-secreta";
 
     public String generateToken(User user) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
