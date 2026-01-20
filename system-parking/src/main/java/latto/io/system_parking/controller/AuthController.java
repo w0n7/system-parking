@@ -3,9 +3,12 @@ package latto.io.system_parking.controller;
 import jakarta.validation.Valid;
 import latto.io.system_parking.config.TokenConfig;
 import latto.io.system_parking.dto.request.LoginRequest;
+import latto.io.system_parking.dto.request.RegisterUserRequest;
 import latto.io.system_parking.dto.response.LoginResponse;
+import latto.io.system_parking.dto.response.RegisterUserResponse;
 import latto.io.system_parking.entity.User;
 import latto.io.system_parking.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,5 +47,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Re>
+    public ResponseEntity<RegisterUserResponse> register(@Valid @RequestBody RegisterUserRequest request) {
+        User newUser = new User();
+        newUser.setName(request.name());
+        newUser.setEmail(request.email());
+        newUser.setPassword(passwordEncoder.encode(request.password()));
+
+        userRepository.save(newUser);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterUserResponse(newUser.getName(), newUser.getEmail()));
+    }
 }
