@@ -1,11 +1,15 @@
 package latto.io.system_parking.controller;
 
 import jakarta.validation.Valid;
-import latto.io.system_parking.dto.LoginRequest;
-import latto.io.system_parking.dto.LoginResponse;
+import latto.io.system_parking.config.TokenConfig;
+import latto.io.system_parking.dto.request.LoginRequest;
+import latto.io.system_parking.dto.response.LoginResponse;
+import latto.io.system_parking.entity.User;
 import latto.io.system_parking.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,15 +22,27 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final TokenConfig tokenConfig;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenConfig tokenConfig) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.tokenConfig = tokenConfig;
+
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return null
+        UsernamePasswordAuthenticationToken emailAndPass = new UsernamePasswordAuthenticationToken(request.email(), request.password());
+        Authentication authentication = authenticationManager.authenticate(emailAndPass);
+
+        User user = (User)  authentication.getPrincipal();
+        String token = tokenConfig.generateToken(user);
+
+        return ResponseEntity.ok().body(new LoginResponse(token));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<Re>
 }
