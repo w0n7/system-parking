@@ -1,6 +1,6 @@
-package latto.io.system_parking.repository;
+package latto.io.system_parking.user.repository;
 
-import latto.io.system_parking.entity.User;
+import latto.io.system_parking.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

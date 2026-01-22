@@ -1,4 +1,4 @@
-package latto.io.system_parking.dto.request;
+package latto.io.system_parking.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

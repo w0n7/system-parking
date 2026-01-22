@@ -1,6 +1,6 @@
-package latto.io.system_parking.config;
+package latto.io.system_parking.user.config;
 
-import latto.io.system_parking.repository.UserRepository;
+import latto.io.system_parking.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

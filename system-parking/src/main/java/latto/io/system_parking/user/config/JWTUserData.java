@@ -1,4 +1,4 @@
-package latto.io.system_parking.config;
+package latto.io.system_parking.user.config;
 
 import lombok.Builder;
 

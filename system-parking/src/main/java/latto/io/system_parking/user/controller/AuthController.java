@@ -1,13 +1,13 @@
-package latto.io.system_parking.controller;
+package latto.io.system_parking.user.controller;
 
 import jakarta.validation.Valid;
-import latto.io.system_parking.config.TokenConfig;
-import latto.io.system_parking.dto.request.LoginRequest;
-import latto.io.system_parking.dto.request.RegisterUserRequest;
-import latto.io.system_parking.dto.response.LoginResponse;
-import latto.io.system_parking.dto.response.RegisterUserResponse;
-import latto.io.system_parking.entity.User;
-import latto.io.system_parking.repository.UserRepository;
+import latto.io.system_parking.user.config.TokenConfig;
+import latto.io.system_parking.user.dto.request.LoginRequest;
+import latto.io.system_parking.user.dto.request.RegisterUserRequest;
+import latto.io.system_parking.user.dto.response.LoginResponse;
+import latto.io.system_parking.user.dto.response.RegisterUserResponse;
+import latto.io.system_parking.user.entity.User;
+import latto.io.system_parking.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package latto.io.system_parking.entity;
+package latto.io.system_parking.user.entity;
 
 
 import jakarta.persistence.*;
