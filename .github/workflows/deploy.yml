@@ -19,6 +19,7 @@ jobs:
           java-version: '21'
 
       - name: Build app
+        working-directory: system-parking
         run: mvn clean package -DskipTests
 
       - name: Login Docker Hub
