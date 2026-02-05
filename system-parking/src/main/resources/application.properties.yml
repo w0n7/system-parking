@@ -39,6 +39,8 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: WARN
 
 management:
+  server:
+    port: 8080
   endpoints:
     web:
       exposure:
