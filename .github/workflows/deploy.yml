@@ -1,40 +1,97 @@
-name: CI
+name: CI / CD - Java Docker
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main", "develop", "*"]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
+      # ================================
+      # 1. Checkout do código
+      # ================================
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ================================
+      # 2. Setup Java 21
+      # ================================
       - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: "21"
 
+      # ================================
+      # 3. Build da aplicação (Maven)
+      # ================================
       - name: Build app
         working-directory: system-parking
         run: mvn clean package -DskipTests
 
+      # ================================
+      # 4. Login no Docker Hub
+      # ================================
       - name: Login Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASS }}
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build image
+      # ================================
+      # 5. Build & Push da imagem Docker
+      # ================================
+      - name: Build & Push Docker Image
         working-directory: system-parking
         run: |
-          docker build -t meuuser/minha-app:latest .
-          docker tag meuuser/minha-app:latest meuuser/minha-app:${{ github.sha }}
+          # --------------------------------
+          # Nome do repositório (GitHub)
+          # --------------------------------
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
 
-      - name: Push image
-        run: |
-          docker push meuuser/minha-app:latest
-          docker push meuuser/minha-app:${{ github.sha }}
+          # --------------------------------
+          # Nome da branch (sanitizado)
+          # --------------------------------
+          BRANCH_NAME=$(echo "${{ github.ref_name }}" | tr '/' '-' | tr '[:upper:]' '[:lower:]')
+
+          # --------------------------------
+          # SHA curto
+          # --------------------------------
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+
+          # --------------------------------
+          # Base da imagem (Docker Hub user)
+          # --------------------------------
+          IMAGE_BASE="${{ secrets.DOCKERHUB_USER }}/$REPO_NAME"
+
+          TAG_BRANCH="$IMAGE_BASE:$BRANCH_NAME"
+          TAG_SHA="$IMAGE_BASE:sha-$SHORT_SHA"
+
+          if [ "$BRANCH_NAME" = "main" ]; then
+            TAG_LATEST="$IMAGE_BASE:latest"
+          fi
+
+          echo "Building image:"
+          echo " - $TAG_BRANCH"
+          echo " - $TAG_SHA"
+          if [ ! -z "$TAG_LATEST" ]; then echo " - $TAG_LATEST"; fi
+
+          # --------------------------------
+          # Build
+          # --------------------------------
+          docker build -t "$TAG_BRANCH" .
+
+          # --------------------------------
+          # Tags adicionais
+          # --------------------------------
+          docker tag "$TAG_BRANCH" "$TAG_SHA"
+          if [ ! -z "$TAG_LATEST" ]; then docker tag "$TAG_BRANCH" "$TAG_LATEST"; fi
+
+          # --------------------------------
+          # Push
+          # --------------------------------
+          docker push "$TAG_BRANCH"
+          docker push "$TAG_SHA"
+          if [ ! -z "$TAG_LATEST" ]; then docker push "$TAG_LATEST"; fi
