@@ -1,47 +1,50 @@
 server:
-port: ${SERVER_PORT:8080}
-shutdown: graceful
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
 
 spring:
-application:
-name: minha-app
+  application:
+    name: minha-app
 
-profiles:
-active: ${SPRING_PROFILES_ACTIVE:prod}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:prod}
 
-datasource:
-url: ${SPRING_DATASOURCE_URL}
-username: ${SPRING_DATASOURCE_USERNAME}
-password: ${SPRING_DATASOURCE_PASSWORD}
-driver-class-name: org.postgresql.Driver
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
-hikari:
-maximum-pool-size: 10
-minimum-idle: 2
-idle-timeout: 30000
-max-lifetime: 1800000
-connection-timeout: 20000
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 20000
 
-jpa:
-hibernate:
-ddl-auto: validate
-open-in-view: false
-properties:
-hibernate:
-format_sql: false
-show-sql: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
 
 logging:
-level:
-root: INFO
-org.hibernate.SQL: WARN
-org.hibernate.type.descriptor.sql.BasicBinder: WARN
+  level:
+    root: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
 
 management:
-endpoints:
-web:
-exposure:
-include: health
-endpoint:
-health:
-show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+jwt:
+  secret: ${JWT_SECRET:?JWT_SECRET_NOT_DEFINED}
