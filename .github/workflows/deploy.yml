@@ -29,6 +29,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASS }}
 
       - name: Build image
+        working-directory: system-parking
         run: |
           docker build -t meuuser/minha-app:latest .
           docker tag meuuser/minha-app:latest meuuser/minha-app:${{ github.sha }}
