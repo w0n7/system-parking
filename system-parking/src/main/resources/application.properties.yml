@@ -1,6 +1,7 @@
 server:
   port: ${SERVER_PORT:8080}
   shutdown: graceful
+  forward-headers-strategy: framework
 
 spring:
   application:
@@ -48,3 +49,4 @@ management:
 
 jwt:
   secret: ${JWT_SECRET:?JWT_SECRET_NOT_DEFINED}
+
